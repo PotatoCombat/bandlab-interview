@@ -36,28 +36,17 @@ function renderPosts(src, comparator) {
         .then(posts => posts.forEach(renderPost));
 }
 
-function clearPosts() {
-    const table = document.querySelector('#slot');
-    table.removeChild(tableBody);
-    tableBody = document.createElement('tbody');
-    table.appendChild(tableBody);
-}
-
 function createTableHeaderFsm(comparator) {
     const fsm = {
-        state: 'default',
+        state: 'asc',
         actions: {
-            default: () => {
-                sortPosts(comparator);
-                fsm.state = 'asc';
-            },
             asc: () => {
                 sortPosts((a, b) => comparator(b, a));
                 fsm.state = 'desc';
             },
             desc: () => {
-                sortPosts((a, b) => a.data[`id`] - b.data[`id`]);
-                fsm.state = 'default';
+                sortPosts(sortPosts(comparator));
+                fsm.state = 'asc';
             }
         }
     }
@@ -90,13 +79,11 @@ const postsUrl = 'https://jsonplaceholder.typicode.com/posts';
 
 document.querySelector('#th-user')
     .addEventListener('click', function() {
-        clearPosts();
         userHeader.actions[userHeader.state]();
     });
 
 document.querySelector('#th-title')
     .addEventListener('click', function() {
-        clearPosts();
         titleHeader.actions[titleHeader.state]();
     });
 
