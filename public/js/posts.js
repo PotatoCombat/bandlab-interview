@@ -45,7 +45,7 @@ function createTableHeaderFsm(comparator) {
                 fsm.state = 'desc';
             },
             desc: () => {
-                sortPosts(sortPosts(comparator));
+                sortPosts(comparator);
                 fsm.state = 'asc';
             }
         }
@@ -54,8 +54,10 @@ function createTableHeaderFsm(comparator) {
 }
 
 function sortPosts(comparator) {
-    posts.sort(comparator)
-        .forEach(post => tableBody.appendChild(post.node));
+    posts.sort((a, b) => {
+        const result = comparator(a, b);
+        return result !== 0 ? result : compareIds(a, b);
+    }).forEach(post => tableBody.appendChild(post.node));
 }
 
 function compareIds(a, b) {
@@ -63,13 +65,11 @@ function compareIds(a, b) {
 }
 
 function compareUserIds(a, b) {
-    const result = a.data[`userId`] - b.data[`userId`];
-    return result === 0 ? compareIds(a, b) : result;
+    return a.data[`userId`] - b.data[`userId`];
 }
 
 function compareTitles(a, b) {
-    const result = a.data[`title`].localeCompare(b.data[`title`]);
-    return result === 0 ? compareIds(a, b) : result;
+    return a.data[`title`].localeCompare(b.data[`title`]);
 }
 
 const userHeader = createTableHeaderFsm(compareUserIds);
