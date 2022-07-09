@@ -2,8 +2,10 @@
   "name": "bandlab-interview",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {},
+  "main": "bin/www",
+  "scripts": {
+    "start": "node bin/www"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
