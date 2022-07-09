@@ -1,12 +1,8 @@
 # Bandlab Interview
 
-**Instructions:**
-```
-The pages for this assignment are static HTML documents.
+**How to run:**
 
-They can be found in `pages/`.
+`npm start`
 
-Please open the page in your browser in order to view them. 
-```
-
+---
 **Author:** Gabriel Benedict Teo Jian Cheng (`@potatocombat`).
