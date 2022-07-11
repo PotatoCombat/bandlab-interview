@@ -8,6 +8,10 @@ body {
   margin: 0;
 }
 
+p {
+  margin: 0;
+}
+
 nav {
   display: flex;
   flex-direction: row;
@@ -31,40 +35,52 @@ nav > a.selected, nav > a:hover {
   text-decoration: underline;
 }
 
-#slot {
+#list-header {
   width: 100%;
+  display: flex;
+  margin-top: 5px;
 }
 
-#th-user {
-  text-align: center;
-  width: 10%;
-}
-
-table {
-  border-spacing: 0 10px;
-  border-collapse: separate;
-}
-
-thead {
+#list-header > * {
   cursor: pointer;
   font-weight: bold;
   text-decoration: underline;
 }
 
-.th:hover {
+#list-header > *:hover {
   color: var(--theme-color);
 }
 
-.post {
-  border: solid black 3px;
-  background-color: lightgrey;
-  margin: 5px;
+.list-heading::after {
+  font-size: small;
+}
+
+.list-heading[state='0']::after {
+  content: ' ▼';
+}
+
+.list-heading[state='1']::after {
+  content: ' ▲';
+}
+
+#heading-user {
+  text-align: center;
+  width: 6em;
+}
+
+#list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .post-user {
-  text-align: center;
   font-weight: bold;
-  padding: 1.5em 0;
+  width: 6em;
+}
+
+.post-content {
+  width: calc(100% - 6em);
 }
 
 .post-title {
@@ -75,16 +91,16 @@ thead {
   font-size: smaller;
 }
 
-.audio-player {
+.post, .audio-player {
   display: flex;
   flex-direction: row;
   background-color: lightgrey;
   margin: 5px 0;
-  padding: 1em;
+  padding: 1em 0;
 }
+
 .audio-player > p {
   line-height: 2em;
-  margin-left: 10px;
 }
 
 .audio-player > button {
@@ -102,7 +118,7 @@ thead {
 
 .audio-player-controls-label {
   display: block;
-  width: 1em;
+  width: 6em;
   line-height: 2em;
   cursor: pointer;
 }
@@ -128,6 +144,9 @@ thead {
   font-weight: bold;
 }
 
-p {
-  margin: 0;
+.centredText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
