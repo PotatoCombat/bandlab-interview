@@ -6,13 +6,12 @@
   <title>Samples - BandLab</title>
   <base href="/public">
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script type="module" src="components/NavBar.js"></script>
+  <script type="module" src="components/AudioPlayer.js"></script>
 </head>
 <body>
-  <nav>
-    <a href="http://localhost:3000/posts">Posts</a>
-    <a class="selected" href="http://localhost:3000/samples">Samples</a>
-  </nav>
-  <div id="slot" style="display: flex; flex-direction: column"></div>
-  <script type="text/javascript" src="js/samples.js" crossorigin="anonymous"></script>
+  <nav id="nav-bar"></nav>
+  <div id="list"></div>
+  <script type="module" src="js/samples.js"></script>
 </body>
 </html>

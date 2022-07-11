@@ -1,90 +1,67 @@
-let tableBody = document.querySelector('#slot tbody');
-let posts = [];
+import NavBar from "../components/NavBar.js";
+import Post from "../components/Post.js";
+import Switch from "../components/Switch.js";
 
-function renderPost(post) {
-    const row = tableBody.insertRow();
-    row.className = `post`;
+const list = document.querySelector('#list');
+const headings = {
+    user: new Switch(document.querySelector('#heading-user'), onSelectedHeading),
+    title: new Switch(document.querySelector('#heading-title'), onSelectedHeading),
+};
 
-    const userCell = row.insertCell();
-    userCell.innerHTML = post[`userId`];
-    userCell.className = `post-user`;
+const postsUrl = 'https://jsonplaceholder.typicode.com/posts';
+const posts = [];
 
-    const contentCell = row.insertCell();
-    contentCell.className = `post-content`;
+let selectedHeading;
 
-    const titleCell = document.createElement('p');
-    titleCell.innerHTML = post[`title`];
-    titleCell.className = `post-title`;
-
-    const bodyCell = document.createElement('p');
-    bodyCell.innerHTML = post[`body`];
-    bodyCell.className = `post-body`;
-
-    contentCell.appendChild(titleCell);
-    contentCell.appendChild(bodyCell);
-
-    posts.push({
-        data: post,
-        node: row,
-    });
-}
-
-function renderPosts(src, comparator) {
-    fetch(src)
-        .then(response => response.json())
-        .then(json => comparator ? json.sort(comparator) : json)
-        .then(posts => posts.forEach(renderPost));
-}
-
-function createTableHeaderFsm(comparator) {
-    const fsm = {
-        state: 'asc',
-        actions: {
-            asc: () => {
-                sortPosts((a, b) => comparator(b, a));
-                fsm.state = 'desc';
-            },
-            desc: () => {
-                sortPosts(comparator);
-                fsm.state = 'asc';
-            }
-        }
+function onSelectedHeading(heading) {
+    if (selectedHeading !== heading && selectedHeading !== undefined) {
+        selectedHeading.reset();
     }
-    return fsm;
+    selectedHeading = heading;
+    selectedHeading.toggle();
 }
 
 function sortPosts(comparator) {
     posts.sort((a, b) => {
         const result = comparator(a, b);
         return result !== 0 ? result : compareIds(a, b);
-    }).forEach(post => tableBody.appendChild(post.node));
+    }).forEach(post => list.appendChild(post.element));
 }
 
 function compareIds(a, b) {
-    return a.data[`id`] - b.data[`id`];
+    return a.id - b.id;
 }
 
 function compareUserIds(a, b) {
-    return a.data[`userId`] - b.data[`userId`];
+    return a.userId - b.userId;
 }
 
 function compareTitles(a, b) {
-    return a.data[`title`].localeCompare(b.data[`title`]);
+    return a.title.localeCompare(b.title);
 }
 
-const userHeader = createTableHeaderFsm(compareUserIds);
-const titleHeader = createTableHeaderFsm(compareTitles);
+function reverse(comparator) {
+    return (a, b) => comparator(b, a);
+}
 
-const postsUrl = 'https://jsonplaceholder.typicode.com/posts';
+function setupHeader(header, comparator) {
+    header.addAction(() => sortPosts(comparator));
+    header.addAction(() => sortPosts(reverse(comparator)));
+    header.addAction(() => sortPosts(compareIds));
+}
 
-document.querySelector('#th-user')
-    .addEventListener('click', function() {
-        userHeader.actions[userHeader.state]();
-    });
+const navBar = new NavBar(document.querySelector('#nav-bar'));
+navBar.render();
+navBar.selectPage(NavBar.pages.POSTS);
 
-document.querySelector('#th-title')
-    .addEventListener('click', function() {
-        titleHeader.actions[titleHeader.state]();
-    });
+setupHeader(headings.user, compareUserIds);
+setupHeader(headings.title, compareTitles);
 
-renderPosts(postsUrl);
+fetch(postsUrl)
+    .then(response => response.json())
+    .then(json => json.map(post => new Post(post)))
+    .then(mappedPosts => mappedPosts
+        .forEach(post => {
+            posts.push(post);
+            list.appendChild(post.render());
+    }));

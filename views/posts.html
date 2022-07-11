@@ -6,21 +6,18 @@
   <title>Posts - BandLab</title>
   <base href="/public">
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script type="module" src="components/NavBar.js"></script>
+  <script type="module" src="components/Post.js"></script>
+  <script type="module" src="components/Switch.js"></script>
 </head>
 <body>
-<nav>
-  <a class="selected" href="http://localhost:3000/posts">Posts</a>
-  <a href="http://localhost:3000/samples">Samples</a>
-</nav>
-  <table id="slot">
-    <thead>
-      <tr>
-        <td id="th-user" class="th">Users ⬍</td>
-        <td id="th-title" class="th">Titles ⬍</td>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-<script type="text/javascript" src="js/posts.js" crossorigin="anonymous"></script>
+  <nav id="nav-bar"></nav>
+  <div id="list-header">
+    <p id="heading-user" class="list-heading">Users</p>
+    <p id="heading-title" class="list-heading">Titles</p>
+  </div>
+  <div id="list">
+  </div>
+  <script type="module" src="js/posts.js"></script>
 </body>
 </html>
